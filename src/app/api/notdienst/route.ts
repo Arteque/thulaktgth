@@ -32,7 +32,7 @@ export async function GET() {
     console.log(params)
     try {
         // Fetch API data (expecting XML format)
-        const res = await fetch(`${DATA_SOURCE_URL}?number=10&begin=${params.start}&end=${params.end}&token=${API_KEY}`);
+        const res = await fetch(`${DATA_SOURCE_URL}?number=10&begin=${params.start}&end=${params.end}&token=${API_KEY}`,{cache:"no-store"});
         
         // Ensure the fetch was successful
         if (!res.ok) {
