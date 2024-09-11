@@ -29,7 +29,6 @@ export async function GET() {
 
     const params = { start, end };
     
-    console.log(params)
     try {
         // Fetch API data (expecting XML format)
         const res = await fetch(`${DATA_SOURCE_URL}?number=10&begin=${params.start}&end=${params.end}&token=${API_KEY}`,{cache:"no-store"});
@@ -45,7 +44,6 @@ export async function GET() {
         // Convert XML to JSON
         const jsonData = await parseStringPromise(xmlData);
 
-        console.log(jsonData);
 
         // Return JSON response
         return NextResponse.json(jsonData);
