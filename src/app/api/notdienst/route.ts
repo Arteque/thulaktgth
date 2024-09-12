@@ -28,10 +28,10 @@ export async function GET() {
     
 
     const params = { start, end };
-    
+    console.log(start, end)
     try {
         // Fetch API data (expecting XML format)
-        const res = await fetch(`${DATA_SOURCE_URL}?number=10&begin=${params.start}&end=${params.end}&token=${API_KEY}`);
+        const res = await fetch(`${DATA_SOURCE_URL}?number=3&begin=${params.start}&end=${params.end}&token=${API_KEY}`);
         
         // Ensure the fetch was successful
         if (!res.ok) {
