@@ -32,10 +32,18 @@ export async function GET(request: Request) {
         // Convert XML to JSON
         const jsonData = await parseStringPromise(xmlData);
 
-        // Return JSON response
-        return NextResponse.json(jsonData);
+        // Add CORS headers to allow requests from your frontend
+        const response = NextResponse.json(jsonData);
+        response.headers.set('Access-Control-Allow-Origin', 'https://dev.stadt-apotheke-gotha.de');
+        response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+        response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
+        
+        return response;
+
     } catch (error) {
         console.error("Error fetching or parsing data:", error);
-        return NextResponse.json({ error: "Failed to fetch or parse data" }, { status: 500 });
+        const errorResponse = NextResponse.json({ error: "Failed to fetch or parse data" }, { status: 500 });
+        errorResponse.headers.set('Access-Control-Allow-Origin', 'https://dev.stadt-apotheke-gotha.de');
+        return errorResponse;
     }
 }
