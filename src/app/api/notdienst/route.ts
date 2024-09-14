@@ -4,38 +4,23 @@ import { parseStringPromise } from "xml2js"; // Import xml2js
 const DATA_SOURCE_URL = "https://www.lakt.de/api";
 const API_KEY: string = process.env.DATA_API_KEY as string;
 
-export async function GET() {
-    const date = new Date();
-
-    // Format start date as 'DD-MM-YYYY'
-    const start = date.toLocaleDateString("de-DE", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-    }).replace(/[.,;]/g, "-");
-
-    // Add 1 day to current date
-    const nextDay = new Date(date);
-    nextDay.setDate(date.getDate() + 1);
-
-    // Format end date as 'DD-MM-YYYY'
-    const end = nextDay.toLocaleDateString("de-DE", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit"
-    }).replace(/[.,;]/g, "-");
-
+export async function GET(request: Request) {
+    const { searchParams } = new URL(request.url);
     
+    // Extract 'begin' and 'end' parameters from query string
+    const begin = searchParams.get('begin');
+    const end = searchParams.get('end');
 
-    const params = { start, end };
-    console.log(start, end)
+    if (!begin || !end) {
+        return NextResponse.json({ error: "Missing 'begin' or 'end' query parameters" }, { status: 400 });
+    }
+
     try {
         // Fetch API data (expecting XML format)
         const res = await fetch(
-            `${DATA_SOURCE_URL}?number=1&begin=${params.start}&end=${params.end}&token=${API_KEY}`,
-            {cache:'no-store'}
+            `${DATA_SOURCE_URL}?number=1&begin=${begin}&end=${end}&token=${API_KEY}`,
         );
-        
+
         // Ensure the fetch was successful
         if (!res.ok) {
             throw new Error(`Fetch error: ${res.status} ${res.statusText}`);
@@ -46,7 +31,6 @@ export async function GET() {
 
         // Convert XML to JSON
         const jsonData = await parseStringPromise(xmlData);
-
 
         // Return JSON response
         return NextResponse.json(jsonData);
