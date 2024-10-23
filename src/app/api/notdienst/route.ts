@@ -10,7 +10,7 @@ export async function GET(request: Request) {
     // Extract 'begin' and 'end' parameters from query string
     const begin = searchParams.get('begin');
     const end = searchParams.get('end');
-
+// 
     if (!begin || !end) {
         return NextResponse.json({ error: "Missing 'begin' or 'end' query parameters" }, { status: 400 });
     }
