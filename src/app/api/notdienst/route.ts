@@ -43,7 +43,7 @@ export async function GET(request: Request) {
     } catch (error) {
         console.error("Error fetching or parsing data:", error);
         const errorResponse = NextResponse.json({ error: "Failed to fetch or parse data" }, { status: 500 });
-        errorResponse.headers.set('Access-Control-Allow-Origin', 'https://dev.stadt-apotheke-gotha.de');
+        errorResponse.headers.set('Access-Control-Allow-Origin', 'https://stadt-apotheke-gotha.de');
         return errorResponse;
     }
 }
