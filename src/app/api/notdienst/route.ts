@@ -34,7 +34,7 @@ export async function GET(request: Request) {
 
         // Add CORS headers to allow requests from your frontend
         const response = NextResponse.json(jsonData);
-        response.headers.set('Access-Control-Allow-Origin', 'https://dev.stadt-apotheke-gotha.de');
+        response.headers.set('Access-Control-Allow-Origin', 'https://stadt-apotheke-gotha.de');
         response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
         response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
         
