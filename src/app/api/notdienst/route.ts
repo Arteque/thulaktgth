@@ -6,7 +6,13 @@ const API_KEY: string = process.env.DATA_API_KEY as string;
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
-    
+    const origin = request.headers.get('origin') || '';
+
+    const allowedOrigins = [
+        'https://www.stadt-apotheke-gotha.de',
+        'https://stadt-apotheke-gotha.de'
+    ];
+
     // Extract 'begin' and 'end' parameters from query string
     const begin = searchParams.get('begin');
     const end = searchParams.get('end');
@@ -34,7 +40,14 @@ export async function GET(request: Request) {
 
         // Add CORS headers to allow requests from your frontend
         const response = NextResponse.json(jsonData);
-        response.headers.set('Access-Control-Allow-Origin', 'https://stadt-apotheke-gotha.de');
+
+        if (allowedOrigins.includes(origin)) {
+            response.headers.set('Access-Control-Allow-Origin', origin);
+        } else {
+            response.headers.set('Access-Control-Allow-Origin', 'null');
+        }
+
+        // response.headers.set('Access-Control-Allow-Origin', 'https://stadt-apotheke-gotha.de');
         response.headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
         response.headers.set('Access-Control-Allow-Headers', 'Content-Type');
         
@@ -43,7 +56,12 @@ export async function GET(request: Request) {
     } catch (error) {
         console.error("Error fetching or parsing data:", error);
         const errorResponse = NextResponse.json({ error: "Failed to fetch or parse data" }, { status: 500 });
-        errorResponse.headers.set('Access-Control-Allow-Origin', 'https://stadt-apotheke-gotha.de');
+        if (allowedOrigins.includes(origin)) {
+            errorResponse.headers.set('Access-Control-Allow-Origin', origin);
+        } else {
+            errorResponse.headers.set('Access-Control-Allow-Origin', 'null');
+        }
+        // errorResponse.headers.set('Access-Control-Allow-Origin', 'https://stadt-apotheke-gotha.de');
         return errorResponse;
     }
 }
